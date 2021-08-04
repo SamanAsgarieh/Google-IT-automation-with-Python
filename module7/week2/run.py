@@ -3,20 +3,11 @@
 import os
 import requests
 
-path = "/data/feedback/"
-reviews = os.listdir(path)
+files = os.listdir('/data/feedback/')
 
-dict = {}
+for file in files:
+    with open('data/feedback/' + file) as information:
+        info = information.read().split('\n')
+        feedback = {'title':info[0], 'name':info[1], 'date':info[2], 'feedback':info[3]}
 
-for review in reviews:
-  with open(path + review) as f:
-    dict["title"] = f.readline().strip()
-    dict["name"] = f.readline().strip()
-    dict["date"] = f.readline().strip()
-    dict["feedback"] = f.readline().strip()
-	
-  response = requests.post("http://34.123.16.109/feedback/", json=dict)
-  response.raise_for_status()
-print(response.status_code)
-	
-	
+        request = requests.post('http://34.123.192.178/feedback/', data = feedback)
